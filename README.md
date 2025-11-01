@@ -11,10 +11,11 @@ It provides a lightweight HTTP API for creating and resolving short URLs.
 * Simple UI
 * Dockerized for easy deployment
 
-Upcoming Features
+### Upcoming Features
 
-[] CAPTCHA support for link creation
-[] User authentication (login/register)
+* CAPTCHA support for link creation
+* User authentication (login/register)
+
 ---
 
 ### Getting Started
