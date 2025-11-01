@@ -14,8 +14,9 @@ func main() {
 	var port string = os.Getenv("PORT")
 	var bindAddress string
 	if port == "" {
-		fmt.Println("Set a port to run! example: PORT=8080 ./urlshorter")
-		return
+	
+		fmt.Println("Default PORT(8080) will be used. To change port: PORT=500 ./urlshorter")
+		bindAddress = fmt.Sprintf(":%s", "8080")
 	} else {
 		bindAddress = fmt.Sprintf(":%s", port)
 	}
@@ -26,5 +27,6 @@ func main() {
 	router.GET("/s/:id", routes.RedirectShortUrl)
 	router.POST("/api/create", routes.CreateNewShortUrl)
 	router.GET("/d/:id", routes.DeleteShortUrl)
+	
 	router.Run(bindAddress)
 }
