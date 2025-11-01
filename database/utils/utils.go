@@ -18,7 +18,7 @@ func GetUrl(id string) (string, error) {
 	err := database.DB.QueryRow(`
 						SELECT redirect_url 
 						FROM short_urls
-						WHERE id = ? AND expired_at > ?
+						WHERE id = ? AND expired_at > ?;
 						`, id, now).Scan(&redirectUrl)
 
 	if err == sql.ErrNoRows {
@@ -60,11 +60,11 @@ func Create(url string, expire int) (models.NewUrl, error) {
 	expiredAt := time.Now().Add(time.Duration(expire) * time.Second).Format("2006-01-02 15:04:05")
 	newUrl.DeleteId = uuid.New().String()
 	newUrl.ShortId = GenerateShortId()
-	err := database.Exec(`
+	_, err := database.DB.Exec(`
 		INSERT INTO short_urls
 		(id,redirect_url,delete_id,expired_at)
 		VALUES
-		(?,?,?,?)
+		(?,?,?,?);
 	`, newUrl.ShortId, url, newUrl.DeleteId, expiredAt)
 
 	return newUrl, err

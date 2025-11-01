@@ -17,12 +17,12 @@ func Init() {
 	defer DB.Close()
 
 	_, err = DB.Exec(`
-		CREATE TABLE IF NOT EXIST shorted_urls {
+		CREATE TABLE IF NOT EXISTS shorted_urls (
 			id TEXT NOT NULL,
 			redirect_url TEXT NOT NULL,
 			delete_id TEXT NOT NULL,
 			expired_at INTEGER NOT NULL
-		}
+		)
 	`)
 
 	if err != nil {

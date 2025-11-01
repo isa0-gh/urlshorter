@@ -1,7 +1,7 @@
 package models
 
 type Body struct {
-	Url    string `json:"url" binding:"requried"`
+	Url    string `json:"url" binding:"required"`
 	Expire int    `json:"expire" binding:"required"` // Expire seconds if nothing gived it will never expire
 }
 
