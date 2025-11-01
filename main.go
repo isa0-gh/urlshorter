@@ -13,7 +13,7 @@ import (
 func main() {
 	var port string = os.Getenv("PORT")
 	var bindAddress string
-	if !port {
+	if port == "" {
 		fmt.Println("Set a port to run! example: PORT=8080 ./urlshorter")
 		return
 	} else {

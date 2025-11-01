@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/google/uuid"
@@ -31,16 +32,41 @@ func GetUrl(id string) (string, error) {
 
 }
 
-func Create(url string, expire int) models.NewUrl {
+func IsUsedId(id string) bool {
+	var exists bool
+	err := database.DB.QueryRow(`SELECT EXISTS(SELECT 1 FROM short_urls WHERE ide = ? LIMIT 1)`, id).Scan(&exists)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func GenerateShortId() string {
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	b := make([]byte, 6)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	if IsUsedId(string(b)) {
+		return GenerateShortId()
+	}
+
+	return string(b)
+
+}
+
+func Create(url string, expire int) (models.NewUrl, error) {
 	var newUrl models.NewUrl
 	expiredAt := time.Now().Add(time.Duration(expire) * time.Second).Format("2006-01-02 15:04:05")
-	deleteId := uuid.New().String()
-	shortId := GenerateShortId()
+	newUrl.DeleteId = uuid.New().String()
+	newUrl.ShortId = GenerateShortId()
 	err := database.Exec(`
 		INSERT INTO short_urls
 		(id,redirect_url,delete_id,expired_at)
 		VALUES
 		(?,?,?,?)
-	`, shortId, url, deleteId, expiredAt)
+	`, newUrl.ShortId, url, newUrl.DeleteId, expiredAt)
+
+	return newUrl, err
 
 }

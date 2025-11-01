@@ -25,7 +25,7 @@ func CreateNewShortUrl(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Invalid Body"})
 		return
 	}
-	resp, err := utils.Create(json.lUrl, json.Expire)
+	resp, err := utils.Create(json.Url, json.Expire)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
